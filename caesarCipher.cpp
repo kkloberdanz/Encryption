@@ -1,3 +1,22 @@
+/*
+ * Programmer  : Kyle Kloberdanz
+ *
+ * Date Created: 15 Feb 2016
+ *
+ * Description :
+ *     This program will take an input file and output file as
+ *     arguments, and can either encrypt them or decrypt them 
+ *     using the Caesar Cipher
+ *
+ * Usage:
+ *     To encode:
+ *         cipher -f INPUTFILE -o OUTPUTFILE
+ *
+ *     To decode:
+ *         cipher -df INPUTFILE -o OUTPUTFILE
+ * 
+ */
+
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
@@ -36,29 +55,22 @@ int main(int argc, char* argv[]){
         if( argv[i][0] == '-' ){
             // set modifier accordingly
             for( j = 1; argv[i][j] != '\0'; j++ ){
-                //cout << argv[i][j];
                 modifier = argv[i][j];
-                //cout << "modifier == " << modifier << endl;
 
                 switch (modifier){
                     case 'o':
-                        //cout << "caesarCipher: Specify output file AFTER "
-                         //   "the input file" << endl;
                         exit(EXIT_FAILURE);
                         break;
                     case 'f':
                         // specifiy input file
                         readFromFile = true;
                         inputFile.open(argv[i+1]);
-                        cout << "Opening file" << endl;
                         break;
                     case 'd':
                         setDecode = true;
                         //cout << "Decoding" << endl;
                         break;
                     default:
-                        //cout << "caesarCipher: Specify input file with -f" 
-                            //<< endl;
                         exit(EXIT_FAILURE);
                 }
             }
@@ -98,6 +110,11 @@ int main(int argc, char* argv[]){
             if( !setDecode ){
                 for( i = 0; i < line.length(); i++ ){
                     if( isLetter(line[i]) ){
+                        if( ((line[i] >= 'x') && (line[i] <= 'z')) ||
+                            ((line[i] >= 'X') && (line[i] <= 'Z')) ){
+                            // sets x to a, y to b, z to c
+                            line[i] = line[i] - 26;
+                        }
                         line[i] += SHIFTAMOUNT;
                     }
                 }
@@ -105,21 +122,29 @@ int main(int argc, char* argv[]){
                     // then print to stdout
                     cout << line << endl;
                 } else {
-                    outputFile << line;
+                    outputFile << line << endl;
                 }
 
             // decode
             } else {
                 for( i = 0; i < line.length(); i++ ){
                     if( isLetter(line[i]) ){
-                        line[i] -= SHIFTAMOUNT;
+                        if( isLetter(line[i]) ){
+                            if( ((line[i] >= 'a') && (line[i] <= 'c')) ||
+                                ((line[i] >= 'A') && (line[i] <= 'C')) ){
+                                // sets a to x, b to y, c to z
+                                line[i] = line[i] + 26;
+                            }
+                            line[i] -= SHIFTAMOUNT;
+                        }
                     }
                 }
+
                 if( !printToFile ){
                     // then print to stdout
                     cout << line << endl;
                 } else {
-                    outputFile << line;
+                    outputFile << line << endl;
                 }
             }
         }
@@ -136,5 +161,5 @@ int main(int argc, char* argv[]){
 }
 
 bool isLetter(char ch){
-    return ((ch >= 'a') && (ch <= 'z')) || ((ch >= 'A') && (ch <= 'Z'));
+    return ( ((ch >= 'a') && (ch <= 'z')) || ((ch >= 'A') && (ch <= 'Z')) );
 }
