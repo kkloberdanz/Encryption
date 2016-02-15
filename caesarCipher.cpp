@@ -129,14 +129,12 @@ int main(int argc, char* argv[]){
             } else {
                 for( i = 0; i < line.length(); i++ ){
                     if( isLetter(line[i]) ){
-                        if( isLetter(line[i]) ){
-                            if( ((line[i] >= 'a') && (line[i] <= 'c')) ||
-                                ((line[i] >= 'A') && (line[i] <= 'C')) ){
-                                // sets a to x, b to y, c to z
-                                line[i] = line[i] + 26;
-                            }
-                            line[i] -= SHIFTAMOUNT;
+                        if( ((line[i] >= 'a') && (line[i] <= 'c')) ||
+                            ((line[i] >= 'A') && (line[i] <= 'C')) ){
+                            // sets a to x, b to y, c to z
+                            line[i] = line[i] + 26;
                         }
+                        line[i] -= SHIFTAMOUNT;
                     }
                 }
 
