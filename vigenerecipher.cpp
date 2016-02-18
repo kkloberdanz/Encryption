@@ -18,7 +18,7 @@
  *                Decipher withoug spaces:
  *                    ./vigenerecipher INPUTFILE OUTPUTFILE -d --no-spaces
  *
- * Notes        : Compiled with g++ (Debian 5.3.1-8)
+ * Notes        : Compiled with g++ (Debian 5.3.1-8) (stretch-sid)
  *                For best results, compile and run with a linux system
  *                (Not tested for Windows, OSX, or any other OS)
  *              
