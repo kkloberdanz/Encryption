@@ -158,7 +158,7 @@ int main(int argc, char* argv[]){
         exit(EXIT_FAILURE);
 
     } else if( argc > 3 ){
-        cout << "vigenerecipher: too few input arguments" << endl;
+        cout << "vigenerecipher: too many input arguments" << endl;
         cout << "(Type vigenerecipher --help for usage)" << endl;
         exit(EXIT_FAILURE);
     }
