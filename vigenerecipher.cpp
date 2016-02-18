@@ -19,8 +19,13 @@
  *                    ./vigenerecipher INPUTFILE OUTPUTFILE -d --no-spaces
  *
  * Notes        : Compiled with g++ (Debian 5.3.1-8) (stretch-sid)
+ *                and GNU Make 4.1
+ *
  *                For best results, compile and run with a linux system
  *                (Not tested for Windows, OSX, or any other OS)
+ *
+ *                To compile, ensure you are in the same directory as the
+ *                Makefile, then type 'make'
  *              
  */
 #include <iostream>
