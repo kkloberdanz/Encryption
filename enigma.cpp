@@ -10,55 +10,104 @@
 
 using namespace std;
 
+string preproscess(string line, bool noSpaces);
+
 class Rotor{
     private:
-        vector<char> alphabet;
+        vector<char> shiftRotor;
     public:
         Rotor();
+        void printShiftRotor();
         void initialize();
-        void shift();
+        //void initialize(string);
+        void shiftRight();
+        void shiftLeft();
         string encryptString(string);
+        string decipherString(string);
 };
 
 Rotor::Rotor(){
 }
 
+void Rotor::printShiftRotor(){
+    for( vector<char>::iterator it = shiftRotor.begin(); 
+                                it != shiftRotor.end(); it++ ){
+        cout << *it << ' ';
+    }
+    cout << endl;
+}
+
 void Rotor::initialize(){
+    // fills the vector, shiftRotor with the letters a -> z,
+    // then randomizes their order
+    shiftRotor = {'b','z','e','p','l','w','m','s','y','o','k','n','c','t','g','d','h','x','i','u','j','q','v','r','f','a'};
+    /*
     srand(time(0));
     int i;
     for( i = 'a'; i <= 'z'; i++ ){
-        alphabet.push_back(i);
+        shiftRotor.push_back(i);
     }
-    random_shuffle( alphabet.begin(), alphabet.end() );
-
-    // for testing, prints vector
-    /*
-    for( vector<char>::iterator it = alphabet.begin(); it != alphabet.end(); it++ ){
-        cout << ' ' << *it;
-    }
-    cout << endl;
+    random_shuffle( shiftRotor.begin(), shiftRotor.end() );
     */
+    this->printShiftRotor();
 }
 
-void Rotor::shift(){
-    char tmp = alphabet.back();
-    alphabet.pop_back();
-    alphabet.insert(alphabet.begin(), tmp);
-    // for testing, prints vector
-    /*
-    for( vector<char>::iterator it = alphabet.begin(); it != alphabet.end(); it++ ){
-        cout << ' ' << *it;
+/*
+void Rotor::initialize(string startingPosition){
+    // fills the vector, shiftRotor with the letters from startingPosition
+    unsigned int i;
+    startingPosition = preproscess(startingPosition, true);
+    for( i = 0; i < startingPosition.length(); i++ ){
+        shiftRotor.push_back(startingPosition[i]);
     }
-    cout << endl;
-    */
+}
+*/
+
+void Rotor::shiftRight(){
+    char tmp = shiftRotor.back();
+    shiftRotor.pop_back();
+    shiftRotor.insert(shiftRotor.begin(), tmp);
+}
+
+void Rotor::shiftLeft(){
+    char tmp = shiftRotor.front();
+    shiftRotor.erase(shiftRotor.begin());
+    shiftRotor.push_back(tmp);
 }
 
 string Rotor::encryptString(string str){
     string output = "";
     unsigned int i;
     for( i = 0; i < str.length(); i++ ){
-        output += alphabet[str[i] - 'a'];
-        this->shift();
+        if( str[i] != ' ' ){
+            output += shiftRotor[str[i] - 'a'];
+        } else {
+            output += ' ';
+        }
+        this->shiftLeft();
+    }
+    return output;
+}
+
+string Rotor::decipherString(string str){
+    string output = "";
+    unsigned int i;
+    unsigned int j;
+    // linear search through shiftRotor for the letter
+    // at str[i]. Append the position + 'a' to output
+    
+    for( i = 0; i < str.length(); i++ ){
+        if( str[i] == ' ' ){
+            output += ' ';
+        } else {
+            for( j = 0; j < shiftRotor.size(); j++ ){
+                if(shiftRotor[j] == str[i]){
+                    output += (j + 'a');
+                    break;
+                }
+            }
+        }
+        this->shiftLeft();
     }
     return output;
 }
@@ -100,7 +149,7 @@ int main(int argc, char* argv[]){
      * input handling
      */
     Rotor rotor1;
-    rotor1.initialize();
+    //string startingPosition = "pnvqtaeuxclkwgiohmbjfdrszy";
 
     bool setDecrypt = false;
     bool noSpaces   = false;
@@ -136,8 +185,7 @@ int main(int argc, char* argv[]){
     inputFile.open(inputFilename);
 
     if( !inputFile.is_open() ){
-        cout << "enigma: Could not open file: " << inputFilename 
-            << endl;
+        cout << "enigma: Could not open file: " << inputFilename << endl;
         exit(EXIT_FAILURE);
     }
 
@@ -152,26 +200,20 @@ int main(int argc, char* argv[]){
     string cipherText = "";
     string decipheredText = "";
 
-    // Delete before submittion
-    /*
-    ofstream testFile;
-    testFile.open("test.txt");
-    */
-
+    rotor1.initialize();
     if( setDecrypt ){
+        //rotor1.initialize(startingPosition);
         while( getline(inputFile, line) ){
             // remove non-alpha characters and lowercase all letters
             cipherText = preproscess(line, noSpaces); 
+            decipheredText = rotor1.decipherString(cipherText);
             outputFile << decipheredText << endl;
         }
 
     } else {
-
         while( getline(inputFile, line) ){
             // remove non-alpha characters and lowercase all letters
             plainText  = preproscess(line, noSpaces);
-            //testFile << plainText << endl;
-
             cipherText = rotor1.encryptString(plainText); 
             outputFile << cipherText << endl;
         }
@@ -179,6 +221,6 @@ int main(int argc, char* argv[]){
 
     outputFile.close();
     inputFile.close();
-    testFile.close();
+    //testFile.close();
     return 0;
 }
