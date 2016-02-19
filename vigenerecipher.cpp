@@ -27,6 +27,8 @@
  *                To compile, ensure you are in the same directory as the
  *                Makefile, then type 'make'
  *              
+ *                To compile without make: 
+ *                'g++ vigenerecipher.cpp -o vigenerecipher -Wall -Wextra -O2'
  */
 #include <iostream>
 #include <cstdlib>
