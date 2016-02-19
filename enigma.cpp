@@ -1,3 +1,38 @@
+/*
+ * Programmer    : Kyle Kloberdanz
+ * Date Created  : 19 Feb 2015
+ * Description   : A simplified implementation of the enigma cipher.
+ *                 Uses 1 rotor instead of 3
+ *
+ * Usage:
+ *     To encrypt:
+ *                : To encipher:
+ *                    ./enigma INPUTFILE OUTPUTFILE
+ *
+ *                Encipher without spaces:
+ *                    ./enigma INPUTFILE OUTPUTFILE --no-spaces
+ *
+ *                To decipher:
+ *                    ./enigma INPUTFILE OUTPUTFILE -d
+ *
+ *                Decipher withoug spaces:
+ *                    ./enigma INPUTFILE OUTPUTFILE -d --no-spaces
+ *
+ * Notes        : Compiled with g++ (Debian 5.3.1-8) (stretch-sid)
+ *                and GNU Make 4.1
+ *                Complier MUST be compatable with c++11 standard
+ *
+ *                For best results, compile and run with a linux system
+ *                (Not tested for Windows, OSX, or any other OS)
+ *
+ *                To compile, ensure you are in the same directory as the
+ *                Makefile, then type 'make'
+ *
+ *                To compile without make: 
+ *                'g++ enigma.cpp -o Enigma -Wall -Wextra -O2 -std=c++11'
+ *              
+ *
+ */
 #include <iostream>
 #include <cstdlib>
 #include <fstream>
@@ -19,7 +54,6 @@ class Rotor{
         Rotor();
         void printShiftRotor();
         void initialize();
-        //void initialize(string);
         void shiftRight();
         void shiftLeft();
         string encryptString(string);
@@ -48,8 +82,8 @@ void Rotor::initialize(){
         shiftRotor.push_back(i);
     }
     random_shuffle( shiftRotor.begin(), shiftRotor.end() );
-    */
     this->printShiftRotor();
+    */
 }
 
 /*
@@ -143,6 +177,21 @@ string preproscess(string line, bool noSpaces){
     return outputline;
 }
 
+void printHelp(){
+    cout << "Usage: To encipher:\n"
+            "        ./enigma INPUTFILE OUTPUTFILE\n\n"
+ 
+            "Encipher without spaces:\n"
+            "        ./enigma INPUTFILE OUTPUTFILE --no-spaces\n\n"
+
+            "   To decipher:\n"
+            "       ./enigma INPUTFILE OUTPUTFILE -d\n\n"
+
+            "   Decipher withoug spaces:\n\n"
+            "       ./enigma INPUTFILE OUTPUTFILE -d --no-spaces\n"
+ << endl;
+}
+
 int main(int argc, char* argv[]){
 
     /*
@@ -154,7 +203,7 @@ int main(int argc, char* argv[]){
     bool setDecrypt = false;
     bool noSpaces   = false;
     if( (argc > 1) && ((string)argv[1] == "--help" ) ){
-        //printHelp();
+        printHelp();
         exit(EXIT_FAILURE);
 
     } else if( (argc == 4) && ((string)argv[3] == "-d") ){
