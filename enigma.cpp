@@ -53,7 +53,8 @@ class Rotor{
     public:
         Rotor();
         void printShiftRotor();
-        void initialize(int);
+        void initialize();
+        void initialize(string);
         void shiftRight();
         void shiftLeft();
         string encryptString(string);
@@ -66,31 +67,32 @@ Rotor::Rotor(){
 void Rotor::printShiftRotor(){
     for( vector<char>::iterator it = shiftRotor.begin(); 
                                 it != shiftRotor.end(); it++ ){
-        cout << *it << ' ';
+        //cout << *it << ' ';
+        cout << *it;
     }
     cout << endl;
 }
 
-void Rotor::initialize(int shiftAmounts){
+void Rotor::initialize(){
+    /*
     shiftRotor = {'b','z','e','p','l','w','m','s','y','o','k','n','c','t','g','d','h','x','i','u','j','q','v','r','f','a'};
     int i;
     for( i = 0; i < shiftAmounts; i++ ){
         this->shiftLeft();
     }
+    */
+
     // fills the vector, shiftRotor with the letters a -> z,
     // then randomizes their order
-    /*
     srand(time(0));
     int i;
     for( i = 'a'; i <= 'z'; i++ ){
         shiftRotor.push_back(i);
     }
     random_shuffle( shiftRotor.begin(), shiftRotor.end() );
-    this->printShiftRotor();
-    */
+    //this->printShiftRotor();
 }
 
-/*
 void Rotor::initialize(string startingPosition){
     // fills the vector, shiftRotor with the letters from startingPosition
     unsigned int i;
@@ -99,7 +101,6 @@ void Rotor::initialize(string startingPosition){
         shiftRotor.push_back(startingPosition[i]);
     }
 }
-*/
 
 void Rotor::shiftRight(){
     char tmp = shiftRotor.back();
@@ -253,14 +254,24 @@ int main(int argc, char* argv[]){
     string cipherText = "";
     string decipheredText = "";
 
-    int key = 0;
+    /*
     cout << (setDecrypt? "Enter key to decrypt: " :
                          "Enter key to encrypt: ");
     cin >> key;
-
-    rotor1.initialize(key);
+    */
+    string key;
     if( setDecrypt ){
-        //rotor1.initialize(startingPosition);
+        cout << "Enter key to decrypt: ";
+        getline(cin, key);
+
+        if(key.length() != 26){
+            cout << "Key is not the correct length!" << endl;
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    if( setDecrypt ){
+        rotor1.initialize(key);
         while( getline(inputFile, line) ){
             // remove non-alpha characters and lowercase all letters
             cipherText = preproscess(line, noSpaces); 
@@ -269,6 +280,7 @@ int main(int argc, char* argv[]){
         }
 
     } else {
+        rotor1.initialize();
         while( getline(inputFile, line) ){
             // remove non-alpha characters and lowercase all letters
             plainText  = preproscess(line, noSpaces);
@@ -279,6 +291,5 @@ int main(int argc, char* argv[]){
 
     outputFile.close();
     inputFile.close();
-    //testFile.close();
     return 0;
 }
