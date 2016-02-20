@@ -53,7 +53,7 @@ class Rotor{
     public:
         Rotor();
         void printShiftRotor();
-        void initialize();
+        void initialize(int);
         void shiftRight();
         void shiftLeft();
         string encryptString(string);
@@ -71,10 +71,14 @@ void Rotor::printShiftRotor(){
     cout << endl;
 }
 
-void Rotor::initialize(){
+void Rotor::initialize(int shiftAmounts){
+    shiftRotor = {'b','z','e','p','l','w','m','s','y','o','k','n','c','t','g','d','h','x','i','u','j','q','v','r','f','a'};
+    int i;
+    for( i = 0; i < shiftAmounts; i++ ){
+        this->shiftLeft();
+    }
     // fills the vector, shiftRotor with the letters a -> z,
     // then randomizes their order
-    shiftRotor = {'b','z','e','p','l','w','m','s','y','o','k','n','c','t','g','d','h','x','i','u','j','q','v','r','f','a'};
     /*
     srand(time(0));
     int i;
@@ -249,7 +253,12 @@ int main(int argc, char* argv[]){
     string cipherText = "";
     string decipheredText = "";
 
-    rotor1.initialize();
+    int key = 0;
+    cout << (setDecrypt? "Enter key to decrypt: " :
+                         "Enter key to encrypt: ");
+    cin >> key;
+
+    rotor1.initialize(key);
     if( setDecrypt ){
         //rotor1.initialize(startingPosition);
         while( getline(inputFile, line) ){
